@@ -1,5 +1,8 @@
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_rcc.h"
 #include "delay.h"
 #include "Config.h"
+#include "lcd16x2.h"
 /* lcd d4->d7 a8->a11
    rs rw e c13->c15
 	 
@@ -27,7 +30,8 @@
 #define Warn3 8
 #define Warn4 9
 #define Warn5 10
-uint32_t input;
+
+static uint32_t input = 0;
 void config(void);
 void EXTI9_5_IRQHandler(void);
 struct state
@@ -36,7 +40,7 @@ struct state
 	uint16_t time;
 	uint8_t next[8];
 };
-const struct state FSM[11]={
+static const struct state FSM[11]={
 {0x92,0,{Stop,Walk,GoW,GoW,GoS,GoS,GoS,GoS}},
 {0x86,10,{WaitW,WaitW,GoW,WaitW,WaitW,WaitW,WaitW,WaitW}},
 {0x8A,5,{Stop,Walk,GoW,Walk,GoS,GoS,GoS,Walk}},
@@ -51,44 +55,55 @@ const struct state FSM[11]={
 };
 int main(void)
 {
+	LCD_Init();
 	config();
 	input=0;
-  uint8_t i=0;
-	while(1)
-	{
-	int time=1;
+	uint8_t i=0;
+	while(1){
+		int time=1;
 		int j;
-	GPIOA->ODR=FSM[i].setup;
-	if(i==Stop) 
-		{				
-				i=FSM[i].next[input];
-		continue;}
-		
-	if(i==GoW||i==GoS||i==Walk||i==WaitW||i==WaitS) {
-  time =	FSM[i].time;	
-	for(j=1;j<=time;j++)
-		{
-					Delays(1);
-		}
-	while(i==FSM[i].next[input])
-	{
-		Delays(1);
-	}
-	i=FSM[i].next[input];
-	continue;
-	}
-	if(i== Warn1||i==Warn2||i==Warn3||i==Warn4||i==Warn5)
-	{
-		while(i== Warn1||i==Warn2||i==Warn3||i==Warn4||i==Warn5)
-		{ GPIOA->ODR=FSM[i].setup;
-		  Delays(1);
+		GPIOA->ODR=FSM[i].setup;
+		if(i==Stop) 
+		{		
+			LCD_Gotoxy(6,0);
+        	LCD_PutNum(0);			
 			i=FSM[i].next[input];
 			continue;
 		}
+		
+		if(i==GoW||i==GoS||i==Walk||i==WaitW||i==WaitS) 
+		{
+  			time =	FSM[i].time;	
+			for(j=1;j<=time;j++)
+			{
+				LCD_Gotoxy(6,0);
+        		LCD_PutNum(j);
+				Delays(1);
+			}
+			while(i==FSM[i].next[input])
+			{
+				LCD_Gotoxy(6,0);
+    			LCD_PutNum(j++);
+				Delays(1);
+			}
+			i=FSM[i].next[input];
+			continue;
+		}
+		if(i== Warn1||i==Warn2||i==Warn3||i==Warn4||i==Warn5)
+		{
+			while(i== Warn1||i==Warn2||i==Warn3||i==Warn4||i==Warn5)
+			{ 
+				GPIOA->ODR=FSM[i].setup;
+				LCD_Gotoxy(6,0);
+            	LCD_PutNum(time++);
+		  		Delays(1);
+				i=FSM[i].next[input];
+				continue;
+			}
+		}
 	}
-	
-  }
 }
+
 void config(void)
 {
 	RCC->APB2ENR |= 0xd;

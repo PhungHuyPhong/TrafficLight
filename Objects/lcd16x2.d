@@ -1,4 +1,5 @@
-./objects/system_stm32f10x.o: RTE\Device\STM32F103C8\system_stm32f10x.c \
+./objects/lcd16x2.o: D:\STM32f103C8T6(KeilC)\Lab5(final)\lcd16x2.c \
+  D:\STM32f103C8T6(KeilC)\Lab5(final)\lcd16x2.h \
   E:\Keil\ MDK\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\Include\stm32f10x.h \
   RTE\_Target_1\RTE_Components.h \
   E:\Keil\ MDK\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h \
@@ -10,4 +11,7 @@
   RTE\Device\STM32F103C8\stm32f10x_conf.h \
   E:\Keil\ MDK\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\stm32f10x_gpio.h \
   E:\Keil\ MDK\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h \
-  E:\Keil\ MDK\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\misc.h
+  E:\Keil\ MDK\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\misc.h \
+  D:\STM32f103C8T6(KeilC)\Lab5(final)\delay.h \
+  E:\Keil\ MDK\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  D:\STM32f103C8T6(KeilC)\Lab5(final)\Config.h

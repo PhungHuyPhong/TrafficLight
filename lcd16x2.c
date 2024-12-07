@@ -18,13 +18,13 @@ void GPIO_LCD_Config(void)
     GPIO_InitTypeDef        GPIO_LCD_InitStruction;
     
     /*Configure GPIO pin Output Level */
-    GPIO_WriteBit(GPIOA, LCD_D4|LCD_D5|LCD_D5|LCD_D7, 0); 
+    GPIO_WriteBit((GPIO_TypeDef*)GPIOA, LCD_D4|LCD_D5|LCD_D5|LCD_D7, 0); 
     GPIO_WriteBit(GPIOC, LCD_RS|LCD_RW|LCD_EN, 0); 
     
     GPIO_LCD_InitStruction.GPIO_Mode    = GPIO_Mode_Out_PP;
     GPIO_LCD_InitStruction.GPIO_Pin     = LCD_D4|LCD_D5|LCD_D6|LCD_D7;      
     GPIO_LCD_InitStruction.GPIO_Speed   = GPIO_Speed_2MHz;
-    GPIO_Init(GPIOA, &GPIO_LCD_InitStruction);
+    GPIO_Init((GPIO_TypeDef*)GPIOA, &GPIO_LCD_InitStruction);
 
 
     GPIO_LCD_InitStruction.GPIO_Pin =  LCD_EN|LCD_RS|LCD_RW;
@@ -41,10 +41,10 @@ void LCD_Enable(void)
 
 void LCD_Send4Bit(unsigned char Data)
 {
-  GPIO_WriteBit(GPIOA, LCD_D4, Data & 0x01);
-  GPIO_WriteBit(GPIOA, LCD_D5, (Data>>1)&1);
-  GPIO_WriteBit(GPIOA, LCD_D6, (Data>>2)&1);
-  GPIO_WriteBit(GPIOA, LCD_D7, (Data>>3)&1);
+  GPIO_WriteBit((GPIO_TypeDef*)GPIOA, LCD_D4, Data & 0x01);
+  GPIO_WriteBit((GPIO_TypeDef*)GPIOA, LCD_D5, (Data>>1)&1);
+  GPIO_WriteBit((GPIO_TypeDef*)GPIOA, LCD_D6, (Data>>2)&1);
+  GPIO_WriteBit((GPIO_TypeDef*)GPIOA, LCD_D7, (Data>>3)&1);
 }
 
 void LCD_SendCommand(unsigned char command)
